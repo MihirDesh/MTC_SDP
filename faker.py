@@ -10,7 +10,7 @@ def generator(n):
     for i in range(n):
         transaction_id = fake.uuid4()
         account_number = fake.bban()
-       
+        
         date = fake.date_this_year()
         time = fake.time()
         cust_id = fake.uuid4()
@@ -29,7 +29,10 @@ def generator(n):
         balance_before = round(random.uniform(1000.0, 50000.0), 2)
         transaction_amount = round(random.uniform(1000.0,balance_before),2)
         balance_after = balance_before - transaction_amount
-        is_fraud = random.choices([0, 1], weights=[50, 50])[0]
+        if(international and (transaction_amount>(0.1 * balance_before)) and (balance_after<1000) and transaction_type == 'payment'):
+            is_fraud = 1
+        is_fraud = 0
+
 
         transactions.append({
             "TransactionID": transaction_id,
